@@ -6,6 +6,7 @@ const ContatoSchema = new mongoose.Schema({
   sobrenome: { type: String, required: false, default: '' },
   email: { type: String, required: false, default: '' },
   telefone: { type: String, required: false, default: '' },
+  data: new Date(dataString),
   criadoEm: { type: Date, default: Date.now },
 });
 
@@ -33,6 +34,7 @@ Contato.prototype.valida = function() {
   if(!this.body.email && !this.body.telefone) {
     this.errors.push('Pelo menos um contato precisa ser enviado: e-mail ou telefone.');
   }
+  if(!this.body.data) this.errors.push('A data é um campo obrigatório.');
 };
 
 Contato.prototype.cleanUp = function() {
@@ -47,6 +49,7 @@ Contato.prototype.cleanUp = function() {
     sobrenome: this.body.sobrenome,
     email: this.body.email,
     telefone: this.body.telefone,
+    data: this.body.data
   };
 };
 
