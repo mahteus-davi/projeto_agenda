@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 
 
+
+
 const ContatoSchema = new mongoose.Schema({
   nome: { type: String, required: true },
   sobrenome: { type: String, required: false, default: '' },
@@ -43,6 +45,11 @@ Contato.prototype.cleanUp = function() {
     if(typeof this.body[key] !== 'string') {
       this.body[key] = '';
     }
+  }
+
+  if (this.body.data) {
+    // Converte a string da data para um objeto Date
+    this.body.data = new Date(this.body.data);
   }
 
   this.body = {
