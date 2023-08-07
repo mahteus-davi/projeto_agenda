@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
+
 const ContatoSchema = new mongoose.Schema({
   nome: { type: String, required: true },
   sobrenome: { type: String, required: false, default: '' },
   email: { type: String, required: false, default: '' },
   telefone: { type: String, required: false, default: '' },
-  data: new Date(dataString),
+  data: { type: Date, required: true },
   criadoEm: { type: Date, default: Date.now },
 });
 
@@ -49,7 +50,7 @@ Contato.prototype.cleanUp = function() {
     sobrenome: this.body.sobrenome,
     email: this.body.email,
     telefone: this.body.telefone,
-    data: this.body.data
+    data: this.body.data,
   };
 };
 
