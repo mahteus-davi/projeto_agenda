@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const moment = require('moment');
 
-
-
+if (this.body.data) {
+  this.body.data = moment(this.body.data).toDate();
+}
 
 const ContatoSchema = new mongoose.Schema({
   nome: { type: String, required: true },
@@ -38,6 +40,7 @@ Contato.prototype.valida = function() {
     this.errors.push('Pelo menos um contato precisa ser enviado: e-mail ou telefone.');
   }
   if(!this.body.data) this.errors.push('A data é um campo obrigatório.');
+
 };
 
 Contato.prototype.cleanUp = function() {
