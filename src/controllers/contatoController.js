@@ -6,6 +6,8 @@ exports.index = (req, res) => {
   });
 };
 
+
+
 exports.register = async(req, res) => {
   try {
     const contato = new Contato(req.body);
@@ -26,14 +28,18 @@ exports.register = async(req, res) => {
   }
 };
 
+const moment = require('moment');
+
 exports.editIndex = async function(req, res) {
   if(!req.params.id) return res.render('404');
 
   const contato = await Contato.buscaPorId(req.params.id);
   if(!contato) return res.render('404');
 
+  contato.minhadata = moment(contato.minhadata).format('YYYY-MM-DDTHH:mm');
   res.render('contato', { contato });
 };
+
 
 exports.edit = async function(req, res) {
   try {

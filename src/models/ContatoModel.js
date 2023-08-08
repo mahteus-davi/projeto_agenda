@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const moment = require('moment');
+
 
 
 const ContatoSchema = new mongoose.Schema({
@@ -7,7 +9,7 @@ const ContatoSchema = new mongoose.Schema({
   sobrenome: { type: String, required: false, default: '' },
   email: { type: String, required: false, default: '' },
   telefone: { type: String, required: false, default: '' },
-  minhadata: { type: String, required: true },
+  minhadata: { type: Date, required: true },
   criadoEm: { type: Date, default: Date.now },
 });
 
@@ -35,18 +37,24 @@ Contato.prototype.valida = function() {
   if(!this.body.email && !this.body.telefone) {
     this.errors.push('Pelo menos um contato precisa ser enviado: e-mail ou telefone.');
   }
-  if(!this.body.minhadata) this.errors.push('A data é um campo obrigatório.');
+  if(!this.body.minhadata) this.errors.push('Data e hora é um campo obrigatório.');
+  
+  
 
 };
 
 Contato.prototype.cleanUp = function() {
-  for(const key in this.body) {
-    if(typeof this.body[key] !== 'string') {
+  console.log("Data antes da conversão:", this.body.minhadata);
+  if (this.body.minhadata) {
+    this.body.minhadata = moment(this.body.minhadata).toDate();
+  }
+  console.log("Data após a conversão:", this.body.minhadata);
+
+  for (const key in this.body) {
+    if (typeof this.body[key] !== 'string' && key !== 'minhadata') {
       this.body[key] = '';
     }
   }
-
-  
 
   this.body = {
     nome: this.body.nome,
@@ -56,6 +64,8 @@ Contato.prototype.cleanUp = function() {
     minhadata: this.body.minhadata,
   };
 };
+
+
 
 Contato.prototype.edit = async function(id) {
   if(typeof id !== 'string') return;
@@ -74,6 +84,12 @@ Contato.buscaPorId = async function(id) {
 Contato.buscaContatos = async function() {
   const contatos = await ContatoModel.find()
     .sort({ criadoEm: -1 });
+
+  // Formate as datas usando o Moment.js
+  contatos.forEach(contato => {
+    contato.minhadata = moment(contato.minhadata).format('DD/MM/YYYY HH:mm');
+  });
+
   return contatos;
 };
 

@@ -1,40 +1,37 @@
 <%- include('includes/head') %>
 <%- include('includes/nav') %>
 
+<!-- Importe o Moment.js aqui -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
 <div class="container">
   <div class="row">
     <div class="col-lg-2"></div>
 
-    <div class="col-lg-8 my-4">
+    <div class="col-lg-45 my-15">
       <h1 class="text-center">Agenda</h1>
-      <p class="text-center lead">Os horarios agendados estão abaixo</p>
+      <p class="text-center lead">Os horários agendados estão abaixo</p>
 
       <%- include('includes/messages') %>
 
-      <% if(contatos.length > 0) { %>
-      <div class="responsive-table">
-        <table class="table my-4">
-          <% contatos.forEach(contato => { %>
-          <tr>
-            <td><%= contato.nome %></td>
-            <td><%= contato.sobrenome %></td>
-            <td><%= contato.telefone %></td>
-            <td><%= contato.email %></td>
-            <td><%= contato.minhadata %></td>
-            <td><a href="/contato/index/<%= contato._id %>">Editar</a></td>
-            <td><a class="text-danger" href="/contato/delete/<%= contato._id %>">Excluir</a></td>
-          </tr>
-          <% }); %>
-        </table>
-      </div>
+      <% if (contatos.length > 0) { %>
+        <div class="responsive-table">
+          <table class="table my-4 table-with-spacing">
+            <% contatos.forEach(contato => { %>
+            <tr>
+              <td><%= contato.nome %></td>
+              <td><%= contato.sobrenome %></td>
+              <td><%= contato.telefone %></td>
+              <td><%= contato.email %></td>
+              <td><%= moment(contato.minhadata).format('DD/MM/YYYY HH:mm') %></td> <!-- Data formatada -->
+              <td><a href="/contato/index/<%= contato._id %>">Editar</a></td>
+              <td><a class="text-danger" href="/contato/delete/<%= contato._id %>">Excluir</a></td>
+            </tr>
+            <% }); %>
+          </table>
+        </div>
       <% } else { %>
-        <p class="text-center lead">Não existem horarios reservados na agenda.</p>
+        <p class="text-center lead">Não existem horários reservados na agenda.</p>
       <% } %>
-
-    </div>
-    
-    <div class="col-lg-2"></div>
-  </div>
-</div>
 
 <%- include('includes/footer') %>
